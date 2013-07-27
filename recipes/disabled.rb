@@ -17,19 +17,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-
-execute "disable selinux enforcement" do
-  only_if "which selinuxenabled && selinuxenabled"
-  command "setenforce 0"
-  action :run
-  notifies :create, "template[/etc/selinux/config]"
+if node['selinux'] == "disabled"
+  execute "disable selinux enforcement" do
+    only_if "which selinuxenabled && selinuxenabled"
+    command "setenforce 0"
+    action :run
+  end
 end
 
 template "/etc/selinux/config" do
   source "sysconfig/selinux.erb"
-  variables(
-    :selinux => "disabled",
-    :selinuxtype => "targeted"
-  )
-  action :nothing
+  action :create
 end
