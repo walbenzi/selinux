@@ -20,3 +20,27 @@ suites:
     "recipe[selinux]"
   ]
   attributes: {}
+
+- name: disabled
+  run_list: [
+    "recipe[minitest-handler::default]",
+    "recipe[selinux]"
+  ]
+  attributes:
+    selinux: "disabled"
+
+- name: permissive
+  run_list: [
+    "recipe[minitest-handler::default]",
+    "recipe[selinux]"
+  ]
+  attributes:
+    selinux: "permissive"
+
+- name: enforcing
+  run_list: [
+    "recipe[minitest-handler::default]",
+    "recipe[selinux]"
+  ]
+  attributes:
+    selinux: "enforcing"

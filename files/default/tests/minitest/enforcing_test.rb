@@ -7,10 +7,14 @@ describe 'selinux::default' do
   # Example spec tests can be found at http://git.io/Fahwsw
 
   #Check Current State
+  it "can run assert_sh" do
+    result = assert_sh("getenforce")
+    assert_includes result, "Enforcing"
+  end
 
   #Check Next Boot configuration
-  it 'Verifies selinux is disabled in /etc/selinux/config' do
-    file('/etc/selinux/config').must_match /^SELINUX=disabled$/
+  it 'Verifies selinux is enabled in /etc/selinux/config' do
+    file('/etc/selinux/config').must_match /^SELINUX=enforcing$/
     file('/etc/selinux/config').must_match /^SELINUXTYPE=targeted$/
   end
 

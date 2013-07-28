@@ -1,7 +1,7 @@
 #
 # Author:: Sean OMeara (<someara@opscode.com>)
 # Cookbook Name:: selinux
-# Recipe:: permissive
+# Recipe:: disabled
 #
 # Copyright 2011, Opscode, Inc.
 #
@@ -17,16 +17,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-
-if node['selinux'] == "permissive"
-  execute "enable selinux as permissive" do
-    not_if "getenforce | egrep -qx 'Permissive|Disabled'"
-    command "setenforce 0"
-    action :run
-  end
-end
-
-template "/etc/selinux/config" do
-  source "sysconfig/selinux.erb"
-  action :create
+if node['selinux'] == "disabled"
+  include_recipe "selinux::disabled"
+elsif node['selinux'] == "permissive"
+  include_recipe "selinux::permissive"
+elsif node['selinux'] == "enforcing"
+  include_recipe "selinux::enforcing"
 end

@@ -30,6 +30,10 @@ Use a node attribute to determine which recipe to load automatically from selinu
 
 Add LWRP/Libraries for manipulating security contexts for files and services managed by Chef.
 
+Testing
+=======
+Tested with testkitchen on RHEL 5.9 and 6.4
+
 License and Author
 ==================
 
