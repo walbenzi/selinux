@@ -81,7 +81,7 @@ Vagrant.configure("2") do |config|
 
     chef.run_list = [
         "recipe[minitest-handler]",
-        "recipe[selinux::permissive]"
+        "recipe[selinux::default]"
     ]
   end
 end

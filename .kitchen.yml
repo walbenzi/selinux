@@ -21,26 +21,62 @@ suites:
   ]
   attributes: {}
 
-- name: disabled
+- name: disabled_noreboot
   run_list: [
     "recipe[minitest-handler::default]",
     "recipe[selinux]"
   ]
-  attributes:
-    selinux: "disabled"
+  attributes: {
+    selinux: "disabled",
+    force_reboot_if_needed: "false"
+  }
 
-- name: permissive
+- name: disabled_reboot
   run_list: [
     "recipe[minitest-handler::default]",
     "recipe[selinux]"
   ]
-  attributes:
-    selinux: "permissive"
+  attributes: {
+    selinux: "disabled",
+    force_reboot_if_needed: "true"
+  }
 
-- name: enforcing
+- name: permissive_noreboot
   run_list: [
     "recipe[minitest-handler::default]",
     "recipe[selinux]"
   ]
-  attributes:
-    selinux: "enforcing"
+  attributes: {
+    selinux: "permissive",
+    force_reboot_if_needed: "false"
+  }
+
+- name: permissive_reboot
+  run_list: [
+    "recipe[minitest-handler::default]",
+    "recipe[selinux]"
+  ]
+  attributes: {
+    selinux: "permissive",
+    force_reboot_if_needed: "true"
+  }
+
+- name: enforcing_noreboot
+  run_list: [
+    "recipe[minitest-handler::default]",
+    "recipe[selinux]"
+  ]
+  attributes: {
+    selinux: "enforcing",
+    force_reboot_if_needed: "false"
+  }
+
+- name: enforcing_reboot
+  run_list: [
+    "recipe[minitest-handler::default]",
+    "recipe[selinux]"
+  ]
+  attributes: {
+    selinux: "enforcing",
+    force_reboot_if_needed: "true"
+  }

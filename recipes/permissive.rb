@@ -18,15 +18,21 @@
 # limitations under the License.
 #
 
-if node['selinux'] == "permissive"
-  execute "enable selinux as permissive" do
-    not_if "getenforce | egrep -qx 'Permissive|Disabled'"
-    command "setenforce 0"
+template "/etc/selinux/config" do
+  source "sysconfig/selinux.erb"
+  action :create
+end
+
+if node['force_reboot_if_needed'] == "true"
+  execute "reboot to reload the a SELinux disabled kernel" do
+    only_if "getenforce | grep Disabled"
+    command "reboot"
     action :run
   end
 end
 
-template "/etc/selinux/config" do
-  source "sysconfig/selinux.erb"
-  action :create
+execute "selinux enforcement should be permissive" do
+  only_if "getenforce | grep Enabled"
+  command "setenforce 0"
+  action :run
 end

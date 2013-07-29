@@ -17,15 +17,22 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-if node['selinux'] == "disabled"
-  execute "disable selinux enforcement" do
-    only_if "which selinuxenabled && selinuxenabled"
-    command "setenforce 0"
-    action :run
-  end
-end
 
 template "/etc/selinux/config" do
   source "sysconfig/selinux.erb"
   action :create
+end
+
+if node['force_reboot_if_needed'] == "true"
+  execute "reboot to reload the a SELinux disabled kernel" do
+    only_if "getenforce | grep -v Disabled"
+    command "reboot"
+    action :run
+  end
+else
+  execute "disable selinux enforcement" do
+    only_if "getenforce | grep -v Disabled" 
+    command "setenforce 0" #Permissive is the best we can do without a reboot
+    action :run
+  end
 end

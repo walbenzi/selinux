@@ -18,16 +18,22 @@
 # limitations under the License.
 #
 
-execute "enable selinux enforcement" do
-  not_if "getenforce | egrep -qx 'Enforcing|Disabled'"
-  command "setenforce 1"
-  action :run
-end
-
 template "/etc/selinux/config" do
   source "sysconfig/selinux.erb"
-  variables(
-    :selinux => "enforcing",
-    :selinuxtype => "targeted"
-  )
+  action :create
+end
+
+#Note that a Disabled, non-forced node will continue to operate incorrectly
+if node['force_reboot_if_needed'] == "true"
+  execute "reboot to reload the a SELinux enabled kernel" do
+    only_if "getenforce | grep Disabled"
+    command "reboot"
+    action :run
+  end
+end
+
+execute "disable selinux enforcement" do
+  only_if "getenforce | grep Permissive"
+  command "setenforce 1" #Permissive is the best we can do without a reboot
+  action :run
 end

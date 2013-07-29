@@ -7,9 +7,13 @@ describe 'selinux::default' do
   # Example spec tests can be found at http://git.io/Fahwsw
 
   #Check Current State
-  it "can run assert_sh" do
-    result = assert_sh("getenforce")
-    assert_includes result, "Enforcing"
+  it "Check the current state of SELinux" do
+    if node['force_reboot_if_needed'] == "true"
+      result = assert_sh("getenforce")
+      assert_includes result, "Enforcing"
+    else
+      puts "force reboot is not set, so current state cannot be guaranteed"
+    end
   end
 
   #Check Next Boot configuration
